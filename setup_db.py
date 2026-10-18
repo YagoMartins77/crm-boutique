@@ -6,7 +6,7 @@ def preparar_banco():
         host="localhost",
         port=3306,
         user="root",
-        password="sua_senha_aqui" 
+        password="12345678" 
     )
     cursor = conn.cursor()
 
