@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users,
   ShoppingBag,
@@ -8,9 +8,14 @@ import {
   Clock,
   Sparkles,
   ChevronRight,
-  Plus
+  Plus,
+  Brain,
+  ArrowRight,
+  Tag,
+  Layers
 } from 'lucide-react';
-import { DashboardMetrics, Cliente, Produto, Venda } from '../types';
+import { DashboardMetrics, Cliente, Produto, Venda, AiInsightSummary } from '../types';
+import { api } from '../services/api';
 
 interface DashboardPageProps {
   metrics: DashboardMetrics;
@@ -35,6 +40,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onNewProduct,
   onSelectClient
 }) => {
+  const [aiInsights, setAiInsights] = useState<AiInsightSummary | null>(null);
+
+  useEffect(() => {
+    api.getAiInsights()
+      .then(res => setAiInsights(res.data))
+      .catch(err => console.warn('Não foi possível carregar insights no dashboard:', err));
+  }, []);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       {/* Banner Demonstrativo Discreto e Elegante */}
@@ -166,7 +179,142 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
       </div>
 
+      {/* Widget de Resumo de Inteligência & Aprendizado das Clientes (IA) */}
+      {aiInsights && (
+        <div style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderRadius: 'var(--radius-md)',
+          border: '1px solid var(--border-light)',
+          padding: '24px 28px',
+          boxShadow: 'var(--shadow-sm)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '18px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: 'var(--radius-sm)',
+                backgroundColor: 'var(--color-gold-light)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <Brain size={20} color="var(--color-gold-hover)" />
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h3 style={{ fontSize: '18px', fontFamily: 'var(--font-serif)', color: 'var(--color-noir)', margin: 0 }}>
+                    Inteligência de Clientes & Padrões Aprendidos
+                  </h3>
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-full)',
+                    backgroundColor: 'var(--color-sand-light)',
+                    color: 'var(--color-charcoal)'
+                  }}>
+                    Ciclo #{aiInsights.iteracao_aprendizado}
+                  </span>
+                </div>
+                <p style={{ fontSize: '12.5px', color: 'var(--color-warm-gray)', marginTop: '2px' }}>
+                  Resumo cognitivo consolidado a partir do histórico e da memória evolutiva gravada em texto.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onNavigate('ai')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                fontSize: '12.5px',
+                fontWeight: 600,
+                color: 'var(--color-gold-hover)',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-sm)',
+                backgroundColor: 'var(--color-gold-light)',
+                transition: 'var(--transition-fast)'
+              }}
+            >
+              <span>Abrir Central de IA & Memória</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
+
+          {/* Texto do Resumo Executivo */}
+          <div style={{
+            fontSize: '13.5px',
+            color: 'var(--color-charcoal)',
+            lineHeight: 1.65,
+            padding: '16px 20px',
+            backgroundColor: 'var(--color-sand-light)',
+            borderRadius: 'var(--radius-sm)',
+            borderLeft: '4px solid var(--color-gold)'
+          }}>
+            {aiInsights.resumo_executivo}
+          </div>
+
+          {/* Destaque dos Padrões e Próximas Ações */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+            {aiInsights.padroes_descobertos.slice(0, 2).map((padrao, idx) => (
+              <div
+                key={idx}
+                style={{
+                  padding: '14px 16px',
+                  backgroundColor: 'var(--bg-body)',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--border-subtle)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '6px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '10.5px', fontWeight: 600, textTransform: 'uppercase', color: 'var(--color-gold-hover)' }}>
+                    {padrao.categoria}
+                  </span>
+                </div>
+                <h5 style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--color-noir)', margin: 0 }}>
+                  {padrao.titulo}
+                </h5>
+                <p style={{ fontSize: '12px', color: 'var(--color-charcoal)', lineHeight: 1.5 }}>
+                  {padrao.descricao}
+                </p>
+              </div>
+            ))}
+
+            {aiInsights.acoes_recomendadas[0] && (
+              <div style={{
+                padding: '14px 16px',
+                backgroundColor: 'var(--color-sand-light)',
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid var(--border-light)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px'
+              }}>
+                <span style={{ fontSize: '10.5px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-terracotta)' }}>
+                  Ação Prioritária Sugerida
+                </span>
+                <h5 style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--color-noir)', margin: 0 }}>
+                  {aiInsights.acoes_recomendadas[0].acao}
+                </h5>
+                <p style={{ fontSize: '12px', color: 'var(--color-warm-gray)' }}>
+                  {aiInsights.acoes_recomendadas[0].motivo}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Gráfico Simples e Elegante de Vendas por Período */}
+
       <div style={{
         backgroundColor: 'var(--bg-surface)',
         padding: '28px',

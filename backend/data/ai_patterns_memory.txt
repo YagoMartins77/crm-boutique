@@ -1,0 +1,30 @@
+# ========================================================
+# 🛍️ AURA BOUTIQUE — MEMÓRIA COGNITIVA DE CLIENTES (CRM IA)
+# ========================================================
+# Este arquivo armazena a base de conhecimento acumulada pelas LLMs
+# do OpenRouter a cada ciclo de análise.
+# Ele é lido pelo agente antes de cada nova análise para fornecer
+# contexto histórico contínuo e permitir aprendizado cumulativo.
+# ========================================================
+
+--- CICLO BASE #0: INICIALIZAÇÃO DO CONHECIMENTO ---
+Data: 22/10/2026 10:00:00
+Status: Estrutura inicial do CRM estabelecida. 5 clientes ativas no sistema.
+
+--- CICLO DE APRENDIZADO #1 (22/10/2026 17:00:00) ---
+Total de Clientes Analisadas: 5
+Total de Vendas no Histórico: 4
+Modelo Utilizado: meta-llama/llama-3.3-70b-instruct:free (OpenRouter)
+
+[SÍNTESE DE APRENDIZADO CONSOLIDADO]
+1. O serviço de Mala em Casa é a principal alavanca de valor percebido pela cliente de alta renda: ticket médio supera R$ 900 (2.5x superior às compras de balcão).
+2. Tecidos nobres como seda pura e linho cru têm índice de conversão de 100% nas clientes de alfaiataria (Juliana Mendes e Mariana Silva). Evitar ofertas de poliéster ou sintéticos para esse grupo.
+3. Clientes de estilo Minimalista Chic (ex: Camila Rocha) recusam estampas e buscam exclusivamente cortes retos e paleta neutra (Fendi, Off-White e Preto).
+4. Helena Albuquerque (VIP) compra sazonalmente em ciclos de transição de coleção (viagens/fim de ano). Janela de reativação preventiva ideal: 60 a 75 dias.
+
+[MAPA DE PREFERÊNCIAS INDIVIDUAIS ACUMULADAS]
+- Mariana Silva Alencar (ID 1): M / 38 / Calçado 37 | Seda, Linho, tons terrosos | Alto valor em Mala em Casa.
+- Beatriz Costa Prado (ID 2): P / 36 / Calçado 36 | Vestidos fluidos, românticos | Sensível a caimento de ombros.
+- Juliana Mendes Carvalho (ID 3): G / 42 / Calçado 39 | Alfaiataria rigorosa, terninhos, blazers areia.
+- Camila Rocha Fontes (ID 4): P / 36 / Calçado 35 | Monocromático chic (Fendi, Off-white, Preto).
+- Helena Albuquerque (ID 5): M / 40 / Calçado 38 | Curadoria sazonal de viagens, compras de alto ticket.

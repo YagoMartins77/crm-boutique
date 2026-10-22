@@ -8,8 +8,10 @@ import { SalesHistoryPage } from './pages/SalesHistoryPage';
 import { RelationshipPage } from './pages/RelationshipPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { AiInsightsPage } from './pages/AiInsightsPage';
 import { ClientStorefrontPage } from './pages/ClientStorefrontPage';
 import { NewClientModal } from './components/NewClientModal';
+
 import { NewProductModal } from './components/NewProductModal';
 import { ClientDetailsModal } from './components/ClientDetailsModal';
 import { api } from './services/api';
@@ -103,6 +105,7 @@ export const App: React.FC = () => {
   // Título da aba atual
   const tabTitles: Record<NavItem, { title: string; subtitle: string }> = {
     overview: { title: 'Visão Geral', subtitle: 'Métricas, faturamento e resumo de atividades' },
+    ai: { title: 'Inteligência & IA', subtitle: 'Aprendizado contínuo de padrões de clientes com OpenRouter e persistência de memória' },
     clients: { title: 'Gestão de Clientes', subtitle: 'Fichas de medidas, estilo e preferências' },
     products: { title: 'Acervo de Peças', subtitle: 'Catálogo de roupas, tecidos e disponibilidade' },
     sales: { title: 'Histórico de Compras', subtitle: 'Registro de transações e formas de pagamento' },
@@ -110,6 +113,7 @@ export const App: React.FC = () => {
     reports: { title: 'Relatórios Analíticos', subtitle: 'Indicadores de desempenho e comportamento' },
     settings: { title: 'Configurações', subtitle: 'Parâmetros da boutique e status do banco' }
   };
+
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-body)' }}>
@@ -148,7 +152,12 @@ export const App: React.FC = () => {
             />
           )}
 
+          {currentTab === 'ai' && (
+            <AiInsightsPage clientes={clientes} />
+          )}
+
           {currentTab === 'clients' && (
+
             <ClientsPage
               clientes={clientes}
               onNewClient={() => setIsNewClientOpen(true)}

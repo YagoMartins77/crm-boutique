@@ -3,6 +3,13 @@ import { listClients, getClientById, createClient } from '../controllers/clientC
 import { listProducts, createProduct } from '../controllers/productController';
 import { listSales, getDashboardMetrics } from '../controllers/saleController';
 import { listPipeline, updatePipelineStage } from '../controllers/pipelineController';
+import {
+  getInsights,
+  triggerAnalysis,
+  getMemory,
+  resetMemoryController,
+  getAiConfig
+} from '../controllers/aiController';
 
 const router = Router();
 
@@ -23,4 +30,12 @@ router.get('/dashboard/metrics', getDashboardMetrics);
 router.get('/pipeline', listPipeline);
 router.patch('/pipeline/:id/stage', updatePipelineStage);
 
+// Rotas de Inteligência Artificial & Aprendizado de Padrões (OpenRouter)
+router.get('/ai/insights', getInsights);
+router.post('/ai/analyze', triggerAnalysis);
+router.get('/ai/memory', getMemory);
+router.post('/ai/memory/reset', resetMemoryController);
+router.get('/ai/config', getAiConfig);
+
 export default router;
+

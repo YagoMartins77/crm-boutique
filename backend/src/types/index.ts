@@ -52,3 +52,38 @@ export interface PipelineItem {
   data_ultimo_contato?: string;
   data_retorno?: string;
 }
+
+export interface AiPatternItem {
+  categoria: 'Estilo & Modelagem' | 'Comportamento & Frequência' | 'Mala em Casa & VIP' | 'Ticket & Cross-selling' | 'Medidas & Ajustes';
+  titulo: string;
+  descricao: string;
+  clientes_relacionadas?: string[];
+}
+
+export interface AiActionItem {
+  prioridade: 'Alta' | 'Media' | 'Baixa';
+  acao: string;
+  cliente_sugerida?: string;
+  motivo: string;
+}
+
+export interface AiInsightSummary {
+  resumo_executivo: string;
+  padroes_descobertos: AiPatternItem[];
+  acoes_recomendadas: AiActionItem[];
+  data_analise: string;
+  modelo_utilizado: string;
+  iteracao_aprendizado: number;
+  total_clientes_analisados: number;
+  isSimulated?: boolean;
+}
+
+export interface AiMemoryInfo {
+  memoryContent: string;
+  lastUpdated: string;
+  iterationCount: number;
+  charCount: number;
+  lineCount: number;
+  filePath: string;
+}
+

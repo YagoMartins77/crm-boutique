@@ -8,11 +8,13 @@ import {
   BarChart3,
   Settings,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Brain
 } from 'lucide-react';
 
 export type NavItem =
   | 'overview'
+  | 'ai'
   | 'clients'
   | 'products'
   | 'sales'
@@ -35,6 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const menuItems = [
     { id: 'overview' as NavItem, label: 'Visão Geral', icon: LayoutDashboard },
+    { id: 'ai' as NavItem, label: 'Inteligência & IA', icon: Brain },
     { id: 'clients' as NavItem, label: 'Clientes', icon: Users },
     { id: 'products' as NavItem, label: 'Produtos / Peças', icon: ShoppingBag },
     { id: 'sales' as NavItem, label: 'Histórico de Compras', icon: Receipt },
@@ -42,6 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'reports' as NavItem, label: 'Relatórios', icon: BarChart3 },
     { id: 'settings' as NavItem, label: 'Configurações', icon: Settings }
   ];
+
 
   return (
     <aside style={{

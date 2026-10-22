@@ -1,6 +1,16 @@
-import { Cliente, Produto, Venda, PipelineItem, DashboardMetrics } from '../types';
+import {
+  Cliente,
+  Produto,
+  Venda,
+  PipelineItem,
+  DashboardMetrics,
+  AiInsightSummary,
+  AiMemoryInfo,
+  AiConfigInfo
+} from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
 
 // Dados demonstrativos elegantes locais para fallback transparente
 export const LOCAL_DEMO_CLIENTES: Cliente[] = [
@@ -406,5 +416,214 @@ export const api = {
         if (anotacoes) item.anotacoes = anotacoes;
       }
     }
+  },
+
+  // ==========================================
+  // Módulo de Inteligência Artificial & OpenRouter
+  // ==========================================
+  async getAiInsights(): Promise<{ data: AiInsightSummary; memoryStats: any; isDemo: boolean }> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ai/insights`);
+      if (!res.ok) throw new Error('Falha na resposta da API');
+      const json = await res.json();
+      return {
+        data: json.data,
+        memoryStats: json.memoryStats,
+        isDemo: !!json.data.isSimulated
+      };
+    } catch (e) {
+      console.warn('API de IA offline, utilizando dados analíticos locais:', e);
+      return {
+        data: LOCAL_DEMO_AI_INSIGHTS,
+        memoryStats: {
+          iterationCount: 1,
+          lineCount: 35,
+          charCount: LOCAL_DEMO_AI_MEMORY.length,
+          lastUpdated: new Date().toISOString()
+        },
+        isDemo: true
+      };
+    }
+  },
+
+  async runAiAnalysis(options?: {
+    apiKey?: string;
+    model?: string;
+    customNote?: string;
+  }): Promise<{ data: AiInsightSummary; memoryStats: any; isDemo: boolean }> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ai/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(options || {})
+      });
+      if (!res.ok) throw new Error('Falha ao processar ciclo de IA');
+      const json = await res.json();
+      return {
+        data: json.data,
+        memoryStats: json.memoryStats,
+        isDemo: !!json.data.isSimulated
+      };
+    } catch (e) {
+      console.warn('Backend indisponível, simulando ciclo de IA localmente:', e);
+      LOCAL_DEMO_AI_INSIGHTS.iteracao_aprendizado += 1;
+      LOCAL_DEMO_AI_INSIGHTS.data_analise = new Date().toISOString();
+      return {
+        data: LOCAL_DEMO_AI_INSIGHTS,
+        memoryStats: {
+          iterationCount: LOCAL_DEMO_AI_INSIGHTS.iteracao_aprendizado,
+          lineCount: 42,
+          charCount: LOCAL_DEMO_AI_MEMORY.length + 300,
+          lastUpdated: new Date().toISOString()
+        },
+        isDemo: true
+      };
+    }
+  },
+
+  async getAiMemory(): Promise<AiMemoryInfo> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ai/memory`);
+      if (!res.ok) throw new Error('Falha ao buscar arquivo de memória');
+      const json = await res.json();
+      return json.data;
+    } catch (e) {
+      return {
+        memoryContent: LOCAL_DEMO_AI_MEMORY,
+        lastUpdated: new Date().toISOString(),
+        iterationCount: 1,
+        charCount: LOCAL_DEMO_AI_MEMORY.length,
+        lineCount: LOCAL_DEMO_AI_MEMORY.split('\n').length,
+        filePath: 'backend/data/ai_patterns_memory.txt'
+      };
+    }
+  },
+
+  async resetAiMemory(): Promise<AiMemoryInfo> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ai/memory/reset`, {
+        method: 'POST'
+      });
+      if (!res.ok) throw new Error('Falha ao resetar memória');
+      const json = await res.json();
+      return json.data;
+    } catch (e) {
+      LOCAL_DEMO_AI_INSIGHTS.iteracao_aprendizado = 0;
+      return {
+        memoryContent: '# Memória resetada para o ciclo inicial.',
+        lastUpdated: new Date().toISOString(),
+        iterationCount: 0,
+        charCount: 40,
+        lineCount: 1,
+        filePath: 'backend/data/ai_patterns_memory.txt'
+      };
+    }
+  },
+
+  async getAiConfig(): Promise<AiConfigInfo> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ai/config`);
+      if (!res.ok) throw new Error('Falha ao buscar config de IA');
+      const json = await res.json();
+      return {
+        freeModels: json.freeModels,
+        defaultModel: json.defaultModel,
+        hasServerKey: json.hasServerKey
+      };
+    } catch (e) {
+      return {
+        freeModels: [
+          'meta-llama/llama-3.3-70b-instruct:free',
+          'google/gemini-2.0-flash-exp:free',
+          'deepseek/deepseek-r1:free',
+          'qwen/qwen-2.5-coder-32b-instruct:free',
+          'meta-llama/llama-3.1-8b-instruct:free'
+        ],
+        defaultModel: 'meta-llama/llama-3.3-70b-instruct:free',
+        hasServerKey: false
+      };
+    }
   }
 };
+
+// Fallback demonstrativo de IA
+export const LOCAL_DEMO_AI_INSIGHTS: AiInsightSummary = {
+  resumo_executivo: 'A IA identificou correlação direta entre o serviço de Mala em Casa e a duplicação do ticket médio. Clientes que preferem alfaiataria (Juliana e Mariana) apresentam 100% de adesão a tecidos nobres naturais (linho puro e seda), enquanto clientes de estilo minimalista priorizam peças monocromáticas nas cores Fendi e Off-White.',
+  padroes_descobertos: [
+    {
+      categoria: 'Mala em Casa & VIP',
+      titulo: 'Mala em Casa eleva ticket médio em 145%',
+      descricao: 'Clientes atendidas via Mala em Casa alcançam ticket médio de R$ 919,00, contra R$ 374,00 em compras convencionais. Alto índice de retenção das peças de linho.',
+      clientes_relacionadas: ['Mariana Silva Alencar', 'Juliana Mendes Carvalho']
+    },
+    {
+      categoria: 'Estilo & Modelagem',
+      titulo: 'Afinidade por Alfaiataria Estruturada em Tamanhos M/G',
+      descricao: 'Cortes retos de alfaiataria (blazers areia, pantalonas e coletes) são as peças com maior giro entre profissionais liberais da base.',
+      clientes_relacionadas: ['Juliana Mendes Carvalho', 'Mariana Silva Alencar']
+    },
+    {
+      categoria: 'Ticket & Cross-selling',
+      titulo: 'Cross-selling Natural entre Camisas de Seda e Pantalonas',
+      descricao: 'Clientes que adquiriram calça de alfaiataria demonstraram interesse imediato em camisas de seda off-white e cintos de couro fino para compor o look completo.',
+      clientes_relacionadas: ['Camila Rocha Fontes', 'Beatriz Costa Prado']
+    },
+    {
+      categoria: 'Comportamento & Frequência',
+      titulo: 'Ciclo Sazonal de Recompra a cada 60-75 dias',
+      descricao: 'Clientes do segmento contemporâneo VIP concentram compras no início de trocas sazonais de coleção. Helena Albuquerque está no momento ideal de recontato.',
+      clientes_relacionadas: ['Helena Albuquerque']
+    }
+  ],
+  acoes_recomendadas: [
+    {
+      prioridade: 'Alta',
+      acao: 'Agendar envio de mala personalizada com Colete Linho Cru e Blazer Areia para Juliana Carvalho',
+      cliente_sugerida: 'Juliana Mendes Carvalho',
+      motivo: 'Comprou conjunto de alfaiataria recentemente e seu tamanho G/42 está com peças compatíveis em estoque.'
+    },
+    {
+      prioridade: 'Alta',
+      acao: 'Fazer contato VIP de reativação com Helena Albuquerque para preview de fim de ano',
+      cliente_sugerida: 'Helena Albuquerque',
+      motivo: 'Cliente inativa há 75 dias. Histórico demonstra compras de alto valor no início da temporada.'
+    },
+    {
+      prioridade: 'Media',
+      acao: 'Apresentar Camisa de Seda Off-White com fita de madrepérola para Camila Rocha',
+      cliente_sugerida: 'Camila Rocha Fontes',
+      motivo: 'Estilo minimalista tamanho P perfeitamente alinhado com o acervo disponível.'
+    }
+  ],
+  data_analise: '2026-10-22T17:00:00.000Z',
+  modelo_utilizado: 'meta-llama/llama-3.3-70b-instruct:free (OpenRouter)',
+  iteracao_aprendizado: 1,
+  total_clientes_analisados: 5,
+  isSimulated: true
+};
+
+export const LOCAL_DEMO_AI_MEMORY = `# ========================================================
+# 🛍️ AURA BOUTIQUE — MEMÓRIA COGNITIVA DE CLIENTES (CRM IA)
+# ========================================================
+# Este arquivo armazena a base de conhecimento acumulada pelas LLMs
+# do OpenRouter a cada ciclo de análise.
+# Ele é lido pelo agente antes de cada nova análise para fornecer
+# contexto histórico contínuo e permitir aprendizado cumulativo.
+# ========================================================
+
+--- CICLO BASE #0: INICIALIZAÇÃO DO CONHECIMENTO ---
+Data: 22/10/2026 10:00:00
+Status: Estrutura inicial do CRM estabelecida.
+
+--- CICLO DE APRENDIZADO #1 (22/10/2026 17:00:00) ---
+Total de Clientes Analisadas: 5
+Total de Vendas no Histórico: 4
+Modelo Utilizado: meta-llama/llama-3.3-70b-instruct:free
+
+[SÍNTESE DE APRENDIZADO CONSOLIDADO]
+1. O serviço de Mala em Casa é a alavanca de maior valor percebido pela cliente de alta renda (ticket médio supera R$ 900).
+2. Tecidos nobres como seda pura e linho cru têm rejeição zero quando apresentados em cortes de alfaiataria contemporânea.
+3. Clientes com estilo Minimalista Chic recusam estampas florais e priorizam paleta Fendi/Off-white/Noir.
+4. Helena Albuquerque necessita de protocolo ativo de relacionamento preventivo aos 60 dias de inatividade.
+`;
+

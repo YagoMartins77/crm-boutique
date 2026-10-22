@@ -14,23 +14,27 @@ crm-boutique/
 │   ├── schema.sql              # DDL: criação de tabelas e relacionamentos
 │   └── seed.sql                # DML: dados demonstrativos iniciais ricos
 ├── backend/                    # API REST em Node.js + TypeScript + Express
+│   ├── data/                   # Armazenamento contínuo da memória de IA em disco
+│   │   ├── ai_patterns_memory.txt  # Arquivo de texto evolutivo lido e atualizado pelas LLMs
+│   │   └── ai_latest_insights.json # Cache rápido dos resumos executivos
 │   ├── src/
 │   │   ├── config/             # Configuração e pool de conexão com MySQL
-│   │   ├── controllers/        # Controladores de clientes, produtos, vendas e pipeline
+│   │   ├── controllers/        # Controladores (clientes, produtos, vendas, pipeline e IA)
+│   │   ├── services/           # Serviços (OpenRouter AI, persistência de memória em texto)
 │   │   ├── data/               # Dados demonstrativos de fallback gracioso
-│   │   ├── routes/             # Rotas da API REST
+│   │   ├── routes/             # Rotas da API REST (/api/ai/...)
 │   │   ├── types/              # Definições de tipos TypeScript
 │   │   └── server.ts           # Inicialização do Express e middlewares
-│   ├── .env.example            # Modelo de variáveis de ambiente
+│   ├── .env.example            # Modelo de variáveis (MySQL + OPENROUTER_API_KEY)
 │   ├── package.json
 │   └── tsconfig.json
 ├── frontend/                   # Aplicação Web em React + TypeScript + Vite
 │   ├── src/
 │   │   ├── components/         # Sidebar, Header, Modais e Cards
-│   │   ├── pages/              # Painel ADM e Área da Cliente
-│   │   ├── services/           # Cliente HTTP da API REST
+│   │   ├── pages/              # Painel ADM, Área da Cliente e Central de Inteligência de IA
+│   │   ├── services/           # Cliente HTTP da API REST (incluindo endpoints de IA)
 │   │   ├── styles/             # Design System de Luxo & Tokens CSS
-│   │   └── types/              # Tipagens da interface
+│   │   └── types/              # Tipagens da interface (AiInsightSummary, etc.)
 │   ├── package.json
 │   └── vite.config.ts
 ├── docker-compose.yml          # Container MySQL 8.0 pronto para uso
@@ -115,10 +119,41 @@ O painel abrirá automaticamente em: **`http://localhost:5173`**
 | **Cadastro de Peça** | Modal para adicionar nova peça ao catálogo com categoria, tamanhos, preço e estoque | ✅ Concluído |
 | **Histórico de Compras** | Registro detalhado de compras, formas de pagamento, faturamento total e ticket médio | ✅ Concluído |
 | **Pipeline & Pós-Venda** | Funil visual por etapas (*Nova Cliente*, *Em Atendimento*, *Mala em Casa*, *Aguardando Pagto.*, *Pós-Venda*, *Inativa*) | ✅ Concluído |
+| **Inteligência Artificial (OpenRouter)** | Análise comportamental com modelos gratuitos, descoberta de padrões e ações sugeridas | ✅ Concluído |
+| **Memória Contínua em Texto** | Arquivo `ai_patterns_memory.txt` onde as LLMs gravam aprendizados para alimentar os próximos ciclos | ✅ Concluído |
+| **Resumo Executivo para a Direção** | Visualização do resumo cognitivo e padrões na Visão Geral e na página dedicada de IA | ✅ Concluído |
 | **Área da Cliente** | Storefront público da boutique com Hero da coleção, curadoria de peças, detalhes e solicitação via WhatsApp | ✅ Concluído |
 | **Alternador de Visão** | Botão no header e sidebar para alternar facilmente entre o *Painel ADM* e a *Área da Cliente* | ✅ Concluído |
 | **Relatórios & Configurações** | Páginas estruturadas com indicação explícita de demonstração analítica | ✅ Concluído |
 | **Fallback Resiliente** | Backend e Frontend contam com dados demonstrativos caso o banco esteja em manutenção | ✅ Concluído |
+
+---
+
+## 🧠 Módulo de Inteligência Artificial & Aprendizado Contínuo (OpenRouter)
+
+O sistema conta com um motor de inteligência artificial de alta costura projetado para aprender continuamente os padrões das clientes da boutique:
+
+### Como funciona o ciclo de aprendizado:
+1. **Modelos Gratuitos do OpenRouter**: Por padrão, o sistema integra-se aos modelos gratuitos mais avançados disponíveis:
+   - `meta-llama/llama-3.3-70b-instruct:free` (Primário)
+   - `google/gemini-2.0-flash-exp:free`
+   - `deepseek/deepseek-r1:free`
+   - `qwen/qwen-2.5-coder-32b-instruct:free`
+   - `meta-llama/llama-3.1-8b-instruct:free`
+   *(Com fallback automático se algum modelo atingir o limite de requisições).*
+
+2. **Memória Contínua em Arquivo de Texto (`backend/data/ai_patterns_memory.txt`)**:
+   - A cada execução, a LLM recebe o conteúdo atual do arquivo de texto (tudo o que foi aprendido nos ciclos anteriores) junto com os dados atuais do CRM (clientes, medidas, compras, estoque e pipeline).
+   - A LLM compara os dados, identifica novos padrões, refina correlações e **reescreve o arquivo de texto** acrescentando a nova iteração de aprendizado (`--- CICLO DE APRENDIZADO #N ---`).
+   - Na próxima chamada, a nova LLM parte dessa base enriquecida, permitindo evolução cumulativa sem perda de contexto.
+
+3. **Resumo Executivo para o Administrador**:
+   - Exibido tanto em destaque no **Dashboard (Visão Geral)** quanto na aba dedicada **Inteligência & IA**.
+   - Inclui diagnósticos de estilo, medidas corporais, propensão ao serviço *Mala em Casa*, tickets médios e botões com links prontos para contato via WhatsApp.
+
+4. **Configuração da Chave**:
+   - Defina `OPENROUTER_API_KEY=sk-or-v1-...` no arquivo [`backend/.env`](backend/.env) ou informe a chave diretamente pela interface administrativa. Caso nenhuma chave seja fornecida, o sistema opera em simulação inteligente resiliente.
+
 
 ---
 

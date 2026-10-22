@@ -1,0 +1,54 @@
+{
+  "resumo_executivo": "A IA identificou correlação direta entre o serviço de Mala em Casa e a duplicação do ticket médio. Clientes que preferem alfaiataria (Juliana e Mariana) apresentam 100% de adesão a tecidos nobres naturais (linho puro e seda), enquanto clientes de estilo minimalista priorizam peças monocromáticas nas cores Fendi e Off-White.",
+  "padroes_descobertos": [
+    {
+      "categoria": "Mala em Casa & VIP",
+      "titulo": "Mala em Casa eleva ticket médio em 145%",
+      "descricao": "Clientes atendidas via Mala em Casa alcançam ticket médio de R$ 919,00, contra R$ 374,00 em compras convencionais. Alto índice de retenção das peças de linho.",
+      "clientes_relacionadas": ["Mariana Silva Alencar", "Juliana Mendes Carvalho"]
+    },
+    {
+      "categoria": "Estilo & Modelagem",
+      "titulo": "Afinidade por Alfaiataria Estruturada em Tamanhos M/G",
+      "descricao": "Cortes retos de alfaiataria (blazers areia, pantalonas e coletes) são as peças com maior giro entre profissionais liberais da base.",
+      "clientes_relacionadas": ["Juliana Mendes Carvalho", "Mariana Silva Alencar"]
+    },
+    {
+      "categoria": "Ticket & Cross-selling",
+      "titulo": "Cross-selling Natural entre Camisas de Seda e Pantalonas",
+      "descricao": "Clientes que adquiriram calça de alfaiataria demonstraram interesse imediato em camisas de seda off-white e cintos de couro fino para compor o look completo.",
+      "clientes_relacionadas": ["Camila Rocha Fontes", "Beatriz Costa Prado"]
+    },
+    {
+      "categoria": "Comportamento & Frequência",
+      "titulo": "Ciclo Sazonal de Recompra a cada 60-75 dias",
+      "descricao": "Clientes do segmento contemporâneo VIP concentram compras no início de trocas sazonais de coleção. Helena Albuquerque está no momento ideal de recontato.",
+      "clientes_relacionadas": ["Helena Albuquerque"]
+    }
+  ],
+  "acoes_recomendadas": [
+    {
+      "prioridade": "Alta",
+      "acao": "Agendar envio de mala personalizada com Colete Linho Cru e Blazer Areia para Juliana Carvalho",
+      "cliente_sugerida": "Juliana Mendes Carvalho",
+      "motivo": "Comprou conjunto de alfaiataria recentemente e seu tamanho G/42 está com peças compatíveis em estoque."
+    },
+    {
+      "prioridade": "Alta",
+      "acao": "Fazer contato VIP de reativação com Helena Albuquerque para preview de fim de ano",
+      "cliente_sugerida": "Helena Albuquerque",
+      "motivo": "Cliente inativa há 75 dias. Histórico demonstra compras de alto valor no início da temporada."
+    },
+    {
+      "prioridade": "Media",
+      "acao": "Apresentar Camisa de Seda Off-White com fita de madrepérola para Camila Rocha",
+      "cliente_sugerida": "Camila Rocha Fontes",
+      "motivo": "Estilo minimalista tamanho P perfeitamente alinhado com o acervo disponível."
+    }
+  ],
+  "data_analise": "2026-10-22T17:00:00.000Z",
+  "modelo_utilizado": "meta-llama/llama-3.3-70b-instruct:free (OpenRouter)",
+  "iteracao_aprendizado": 1,
+  "total_clientes_analisados": 5,
+  "isSimulated": true
+}
